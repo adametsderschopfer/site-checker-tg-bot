@@ -1,0 +1,6 @@
+checker_bot_token: "YOUR_TG_BOT_TOKEN"
+chat_td: -000000000 # YOUR_GROUP_ID
+sites: [
+  "https://www.google.com",
+  "https://www.example.com",
+]
