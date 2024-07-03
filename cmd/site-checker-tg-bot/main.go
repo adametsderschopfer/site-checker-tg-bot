@@ -11,7 +11,7 @@ import (
 type SiteState struct {
 	url         string
 	isAvailable bool
-	error       bool
+	hasError    bool
 }
 
 func main() {
@@ -30,7 +30,7 @@ func main() {
 			notAvailableSites = append(notAvailableSites, SiteState{
 				url:         site,
 				isAvailable: availability,
-				error:       true,
+				hasError:    true,
 			})
 			continue
 		}
@@ -39,19 +39,24 @@ func main() {
 			notAvailableSites = append(notAvailableSites, SiteState{
 				url:         site,
 				isAvailable: availability,
-				error:       false,
+				hasError:    false,
 			})
 		}
 	}
 
 	if len(notAvailableSites) != 0 {
-		var botMessage string = "*Unavailable services detected:*\n"
+		var botMessage string = "*Обнаружены недоступные сервисы:*\n"
 
 		for index, checkedSite := range notAvailableSites {
-			status := `*Unavailable*`
+			status := `*Недоступен*`
+			messageAboutError := ""
 			count := index + 1
 
-			botMessage += fmt.Sprintf("\n%d. %s => %s", count, checkedSite.url, status)
+			if checkedSite.hasError {
+				messageAboutError = ` _[При проверке возникла ошибка]_`
+			}
+
+			botMessage += fmt.Sprintf("\n%d. %s => %s%s", count, checkedSite.url, status, messageAboutError)
 		}
 
 		msg := tgbotapi.NewMessage(cfg.ChatId, botMessage)
