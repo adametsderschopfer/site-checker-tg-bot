@@ -6,15 +6,15 @@ import (
 )
 
 // CheckSiteAvailability ...
-func CheckSiteAvailability(url string) (bool, error) {
+func CheckSiteAvailability(url string) bool {
 	client := &http.Client{
 		Timeout: 10 * time.Second,
 	}
 	resp, err := client.Get(url)
 	if err != nil {
-		return false, err
+		return false
 	}
 	defer resp.Body.Close()
 
-	return resp.StatusCode == http.StatusOK, nil
+	return resp.StatusCode == http.StatusOK
 }

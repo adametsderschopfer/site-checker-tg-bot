@@ -25,22 +25,13 @@ func main() {
 	var notAvailableSites []SiteState
 
 	for _, site := range cfg.Sites {
-		availability, err := checker.CheckSiteAvailability(site)
-		if err != nil {
-			notAvailableSites = append(notAvailableSites, SiteState{
-				url:         site,
-				isAvailable: availability,
-				hasError:    true,
-			})
-			continue
-		}
-
+		availability := checker.CheckSiteAvailability(site)
 		if !availability {
 			notAvailableSites = append(notAvailableSites, SiteState{
 				url:         site,
-				isAvailable: availability,
-				hasError:    false,
+				isAvailable: false,
 			})
+			continue
 		}
 	}
 
@@ -49,14 +40,9 @@ func main() {
 
 		for index, checkedSite := range notAvailableSites {
 			status := `*Unavailable*`
-			messageAboutError := ""
 			count := index + 1
 
-			if checkedSite.hasError {
-				messageAboutError = ` _[Something went wrong on site check]_`
-			}
-
-			botMessage += fmt.Sprintf("\n%d. %s => %s%s", count, checkedSite.url, status, messageAboutError)
+			botMessage += fmt.Sprintf("\n%d. %s => %s", count, checkedSite.url, status)
 		}
 
 		msg := tgbotapi.NewMessage(cfg.ChatId, botMessage)
