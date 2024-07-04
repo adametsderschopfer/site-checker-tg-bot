@@ -45,15 +45,15 @@ func main() {
 	}
 
 	if len(notAvailableSites) != 0 {
-		var botMessage string = "*Обнаружены недоступные сервисы:*\n"
+		var botMessage string = "*Unavailable services detected:*\n"
 
 		for index, checkedSite := range notAvailableSites {
-			status := `*Недоступен*`
+			status := `*Unavailable*`
 			messageAboutError := ""
 			count := index + 1
 
 			if checkedSite.hasError {
-				messageAboutError = ` _[При проверке возникла ошибка]_`
+				messageAboutError = ` _[Something went wrong on site check]_`
 			}
 
 			botMessage += fmt.Sprintf("\n%d. %s => %s%s", count, checkedSite.url, status, messageAboutError)
